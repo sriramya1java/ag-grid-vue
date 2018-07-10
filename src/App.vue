@@ -7,14 +7,17 @@
                        class="ag-theme-balham"
                        :gridOptions="gridOptions"
                        :rowDataChanged="onRowDataChanged"
+                       :rowSelected="onRowSelected"
                        :rowData="rowData">
           </ag-grid-vue>
         </div>
       </div>
-    </div>
+        <div class="clearfix"></div>
+        <button type="button" class="btn btn-primary float-right" :disabled = isDisabled @click='fileDelivery'>Create Delivery File</button>
     <span>
       <router-view></router-view>
     </span>
+   </div>
   </div>
 </template>
 <script>
@@ -38,8 +41,10 @@
         template: '<router-link to="/edittable">edit table</router-link>'
       },
       'delete-component': {
-        router,
-        template: '<router-link to="/deletetable">delete table</router-link>'
+        template: '<a>delete icon</a>',
+        created () {
+          // console.log(this.rowData.tableId)
+        }
       }
     },
     methods: {
@@ -54,19 +59,43 @@
           {headerName: 'Last Updated', field: 'lastUpdatdeBy'},
           {headerName: 'Last Delivered', field: 'lastDelivered'},
           {headerName: 'Delete', field: 'delete', cellRendererFramework: 'delete-component', suppressSorting: true},
-          {headerName: 'Deliver', field: 'deliver', suppressSorting: true}
+          {headerName: 'Deliver', field: 'deliver', suppressSorting: true, checkboxSelection: true, headerCheckboxSelection: true}
         ]
       },
       onRowDataChanged () {
         Vue.nextTick(() => {
           this.gridOptions.api.sizeColumnsToFit()
         })
+      },
+      onRowSelected () {
+        console.log(this.gridOptions.api.getSelectedRows())
+        console.log(this.gridOptions.api.getSelectedRows().length)
+      },
+      fileDelivery () {
+        confirm('Do you want to generate XML for the selected tables? The selected tables are ' + this.gridOptions.api.getSelectedRows())
+      },
+      iconClick: function (event) {
+        // `event` is the native DOM event
+        if (event) {
+          confirm('Do you want to delete the table ' + event.target.id + ' ?')
+          this.tableId = event.target.id
+        }
       }
+      /* isDisabled () {
+        if (this.gridOptions.api.getSelectedRows().length === 0) {
+          console.log(this.gridOptions.api.getSelectedRows().length)
+          return true
+        } else {
+          console.log(this.gridOptions.api.getSelectedRows().length)
+          return false
+        }
+      } */
     },
-    beforeMount () {
+    created () {
       this.gridOptions = {
         enableColResize: true,
         enableSorting: true,
+        rowSelection: 'multiple',
         columnDefs: this.createColDefs(),
         onGridReady: function (params) {
           params.api.sizeColumnsToFit()
