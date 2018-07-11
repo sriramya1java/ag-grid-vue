@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VueRouter from 'vue-router'
 import {
   Vuetify,
   VApp,
@@ -44,6 +45,7 @@ Vue.use(Vuetify, {
     warning: '#FFC107'
   }
 })
+Vue.use(VueRouter)
 
 Vue.config.productionTip = false
 
@@ -51,6 +53,5 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: { App },
-  template: '<App/>'
+  render: h => h(App)
 })

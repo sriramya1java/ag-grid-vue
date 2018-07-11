@@ -41,9 +41,14 @@
         template: '<router-link to="/edittable">edit table</router-link>'
       },
       'delete-component': {
-        template: '<a>delete icon</a>',
+        template: '<a @click="deleteTable">delete icon</a>',
         created () {
           // console.log(this.rowData.tableId)
+        },
+        methods: {
+          deleteTable () {
+            confirm('Do you want to delete the table')
+          }
         }
       }
     },
@@ -96,6 +101,7 @@
         enableColResize: true,
         enableSorting: true,
         rowSelection: 'multiple',
+        suppressRowClickSelection: true,
         columnDefs: this.createColDefs(),
         onGridReady: function (params) {
           params.api.sizeColumnsToFit()
