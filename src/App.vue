@@ -38,7 +38,7 @@
       'ag-grid-vue': AgGridVue,
       'edit-component': {
         router,
-        template: '<a href="#/edittable">edit table</a>'
+        template: '<router-link to="/edittable">edit table</router-link>'
       },
       'delete-component': {
         template: '<a @click="deleteTable">delete icon</a>',
@@ -55,7 +55,7 @@
     methods: {
       createColDefs () {
         return [
-          {headerName: 'Edit', cellRendererFramework: 'edit-component', suppressSorting: true},
+          {headerName: 'Edit', field: 'edit', cellRenderer: percentCellRenderer, suppressSorting: true},
           {headerName: 'Program ID', field: 'programId', icons: {sortAscending: '<i class="fa fa-sort-alpha-asc"/>', sortDescending: '<i class="fa fa-sort-alpha-desc"/>'}, sort: 'asc'},
           {headerName: 'Dataset ID', field: 'datasetId'},
           {headerName: 'Table ID', field: 'tableId'},
@@ -79,12 +79,9 @@
       fileDelivery () {
         confirm('Do you want to generate XML for the selected tables? The selected tables are ' + this.gridOptions.api.getSelectedRows())
       },
-      iconClick: function (event) {
+      iconClick (val) {
         // `event` is the native DOM event
-        if (event) {
-          confirm('Do you want to delete the table ' + event.target.id + ' ?')
-          this.tableId = event.target.id
-        }
+        console.log(val)
       },
       isDisabled () {
         if (this.gridOptions.api.getSelectedRows().length === 0) {
@@ -130,6 +127,15 @@
         }
       ]
     }
+  }
+  function percentCellRenderer (params) {
+    console.log(params.data.datasetId)
+    let aTag = document.createElement('a')
+    let abc = JSON.stringify(params.data)
+    aTag.setAttribute('href', '#/edittable?data=' + abc)
+    aTag.innerHTML = 'edit table'
+    console.log(aTag)
+    return aTag
   }
 </script>
 <style>

@@ -9,7 +9,8 @@
     watch: {
       '$route' (to, from) {
         console.log(from)
-        this.id = to.params.id
+        this.id = this.$route.query.data
+        console.log(this.id)
       }
     },
     data () {
@@ -22,6 +23,10 @@
         this.pathVal = this.$route.name
         console.log(this.pathVal)
       }
+    },
+    created () {
+      this.id = this.$route.query.data
+      console.log(this.id)
     }
   }
 </script>
