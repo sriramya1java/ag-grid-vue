@@ -35,10 +35,10 @@
       }
     },
     components: {
-      AgGridVue,
+      'ag-grid-vue': AgGridVue,
       'edit-component': {
         router,
-        template: '<router-link to="/edittable">edit table</router-link>'
+        template: '<a href="#/edittable">edit table</a>'
       },
       'delete-component': {
         template: '<a @click="deleteTable">delete icon</a>',
@@ -85,8 +85,8 @@
           confirm('Do you want to delete the table ' + event.target.id + ' ?')
           this.tableId = event.target.id
         }
-      }
-      /* isDisabled () {
+      },
+      isDisabled () {
         if (this.gridOptions.api.getSelectedRows().length === 0) {
           console.log(this.gridOptions.api.getSelectedRows().length)
           return true
@@ -94,7 +94,7 @@
           console.log(this.gridOptions.api.getSelectedRows().length)
           return false
         }
-      } */
+      }
     },
     created () {
       this.gridOptions = {
